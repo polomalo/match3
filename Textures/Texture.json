@@ -1,0 +1,39 @@
+{"frames": {
+
+"particle-circle-blue.png":
+{
+	"frame": {"x":904,"y":83,"w":38,"h":38},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":38,"h":38},
+	"sourceSize": {"w":38,"h":38},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"particle-star-red.png":
+{
+	"frame": {"x":904,"y":6,"w":82,"h":70},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":82,"h":70},
+	"sourceSize": {"w":82,"h":70},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"ray.png":
+{
+	"frame": {"x":6,"y":6,"w":82,"h":891},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":82,"h":891},
+	"sourceSize": {"w":82,"h":891},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Texture.png",
+	"format": "RGBA8888",
+	"size": {"w":992,"h":127},
+	"scale": "0.97",
+	"smartupdate": "$TexturePacker:SmartUpdate:a9a0af1b65700efdde94551560c8e123:bbd81fd2cde3a082bbc9fc546aebd765:bf05341493d199a310a03344636aad66$"
+}
+}

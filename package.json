@@ -1,0 +1,92 @@
+{
+  "name": "Match-3",
+  "port": 3000,
+  "scripts": {
+    "dev": "node --experimental-modules --no-warnings run.mjs",
+    "build": "node --experimental-modules --no-warnings run.mjs --build --noserver"
+  },
+  "build": {
+    "loaderLibs": [
+      "App/Libs/Platform/platform.js",
+      "App/Libs/WebFont/webfont.js"
+    ],
+    "loaderFiles": [
+      "App/Libs/Broadcast/Broadcast.js",
+      "App/Libs/Broadcast/Broadcast.Dom.js",
+      "App/Libs/Pixi.Classes/Mraid.js",
+      "App/Libs/Pixi.Classes/Loader.js"
+    ],
+    "mainLibs": [
+      "App/Libs/Pixi/5.1.1-ga-ready/pixi-legacy.js",
+      "  App/Libs/Pixi/pixi-sound.js",
+      "App/Libs/Howler/howler.min.js",
+      "App/Libs/Pixi/pixi-gif.js",
+      "  App/Libs/Pixi/5.1.1/pixi-spine.js",
+      "  App/Libs/Pixi/pixi-multistyle-text.umd.js",
+      "  App/Libs/Pixi/pixi-filters.js",
+      "  App/Libs/Pixi/pixi-projection.js",
+      "  App/Libs/Pixi/pixi-layers.js",
+      "  App/Libs/MatterJs/matter.min.js",
+      "App/Libs/Underscore/underscore-min.js",
+      "  App/Libs/JSMpeg/jsmpeg.min.js",
+      "App/Libs/Stats/stats.min.js",
+      "App/Libs/GreenSock/1.20.4/TweenLite.js",
+      "  App/Libs/GreenSock/1.20.4/plugins/BezierPlugin.js",
+      "  App/Libs/GreenSock/1.20.4/plugins/ColorPropsPlugin.js",
+      "App/Libs/GreenSock/1.20.4/easing/EasePack.js",
+      "  App/Libs/GreenSock/1.20.4/easing/CustomEase.js",
+      "  App/Libs/AmmoJS/ammo.js",
+      "App/Libs/Progressbar/progressbar.js"
+    ],
+    "mainFiles": [
+      "App/Libs/Pixi.Classes/Class.js",
+      "App/Libs/Pixi.Classes/Game.js",
+      "App/Libs/Pixi.Classes/Game.Pixi.js",
+      "  App/Libs/Pixi.Classes/Game.Three.js",
+      "App/Libs/Pixi.Classes/Screen.js",
+      "App/Libs/Pixi.Classes/Screen.Pixi.js",
+      "App/Libs/Pixi.Classes/Screen.Tween.js",
+      "App/Libs/Pixi.Classes/Screen.Dom.js",
+      "App/Libs/Pixi.Classes/Screen.Emitter.js",
+      "App/Libs/Pixi.Classes/Screen.Text.js",
+      "  App/Libs/Pixi.Classes/Screen.Spriter.js",
+      "  App/Libs/Pixi.Classes/Screen.Three.js",
+      "  App/Libs/Pixi.Classes/Screen.VideoAd.js",
+      "App/Libs/Pixi.Classes/Screen.VisualEffects.js",
+      "App/Libs/Pixi.Classes/Screen.Underscore.js",
+      "  App/Libs/Pixi.Classes/Screen.Physics.js",
+      "  App/Libs/Pixi.Classes/Screen.Physics.MatterJS.js",
+      "App/Libs/Pixi.Classes/Debug.js",
+      "  App/Libs/Pixi.Classes/Screen.CachedObjects.js",
+      "App/App.js",
+      "App/Screens/Banner.js",
+      "App/Screens/Tutorial.js",
+      "App/Screens/CallToAction.js",
+      "  App/Screens/EndCard.js",
+      "App/Screens/Gameplay.js"
+    ]
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-remove-strict-mode": "0.0.2",
+    "babel-preset-es2015": "^6.24.1",
+    "browser-sync": "^2.26.7",
+    "colors": "^1.4.0",
+    "compression": "^1.7.2",
+    "express": "^4.16.4",
+    "fs-extra": "^7.0.0",
+    "glob": "^7.1.3",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.0",
+    "gulp-watch": "^5.0.1",
+    "jsonminify": "^0.4.1",
+    "lodash": "^4.17.21",
+    "progress": "^2.0.3"
+  },
+  "engines": {
+    "node": "10.24.1"
+  }
+}

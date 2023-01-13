@@ -1,0 +1,9 @@
+/.idea/*
+/node_modules/*
+package-lock.json
+/*.html
+/Builds/**/*.js
+/Builds/**/*.map
+/Releases/*
+/Sources/*
+Editor.js
