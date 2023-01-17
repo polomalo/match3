@@ -269,18 +269,20 @@ App.Gameplay = new Screen({
 		for (let i = 0; i < this.FIELD_SIZE; i++){
 			for (let k = 0; k < this.FIELD_SIZE; k++){
 				this.buildChild('gameField', {name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k]});
+				let field = this.buildChild('gameField-cell', {column: k, row: i, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE), event: 'tile'});
+				this.ALL_TILES[i][k] = field;
 			}
 		};
-		for (let i = 0; i < this.FIELD_SIZE; i++){
-			this.ALL_TILES[i] = [];
-			for (let k = 0; k < this.FIELD_SIZE; k++){
-				let field = this.buildChild('gameField', {column: k, row: i, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE), position: [130 * k, 135 * i], event: 'tile'});
-				this.ALL_TILES[i][k] = field;
-				// console.log('[' + i + ', ' + k + ']')
-			}
+		// for (let i = 0; i < this.FIELD_SIZE; i++){
+		// 	this.ALL_TILES[i] = [];
+		// 	for (let k = 0; k < this.FIELD_SIZE; k++){
+		// 		let field = this.buildChild('gameField-cell', {column: k, row: i, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE), position: [130 * k, 135 * i], event: 'tile'});
+		// 		this.ALL_TILES[i][k] = field;
+		// 		// console.log('[' + i + ', ' + k + ']')
+		// 	}
 			
-		}
-		this.checkAllField();
+		// }
+		// this.checkAllField();
 		// console.log(this.ALL_TILES);
 	},
 
@@ -296,9 +298,9 @@ App.Gameplay = new Screen({
 			// for (let k = 0; k < transposeMatrix[i].length - 1; k++){
 			// 	this.findSequence(transposeMatrix1[i], transposeMatrix1[i][k], k + 1, i);
 			// }
-			for (let k = 0; k < transposeMatrix[i].length - 1; k++){
-				this.findSequence(transposeMatrix[i], transposeMatrix[i][k], k + 1, i);
-			}
+			// for (let k = 0; k < transposeMatrix[i].length - 1; k++){
+			// 	this.findSequence(transposeMatrix[i], transposeMatrix[i][k], k + 1, i);
+			// }
 		}
 		console.log(transposeMatrix)
 	},
