@@ -73,12 +73,13 @@ App.Gameplay = new Screen({
 
 			this.TILES = [];
 			this.ALL_TILES = [];
+			this.ALL_TILES2 = [];
+			//this.TEST = [];
 
 			this.TILES_ROW = [];
 			this.COUNT = 0;
 			this.MACTHES = [];
-			this.Node();
-			this.DoublyList();
+			this.TEST = [];
 			
 
 		},
@@ -91,7 +92,7 @@ App.Gameplay = new Screen({
 
 			this.buildField();
 			
-			this.checkAllField();
+			
 		},
 
 		'Gameplay tile click': function(sprite) {
@@ -180,31 +181,6 @@ App.Gameplay = new Screen({
 
 	},
 
-	Node(value){
-		this.data = value;
-		this.next = null;
-		this.prev = null;
-	},
-
-	DoublyList() {
-		this._length = 0;
-		this.head = null;
-		this.tail = null;
-	},
-
-	add(value) {
-		let node = new Node(value);
-		if (this.length) {
-			this.tail.next = node;
-			node.prev = this.tail;
-			this.tail = node;
-		} else {
-			this.head = node;
-			this.tail = node;
-		}
-		this._length++;
-		return node;
-	},
 
 	
 
@@ -298,93 +274,135 @@ App.Gameplay = new Screen({
 		for (let i = 0; i < this.FIELD_SIZE; i++){
 			this.ALL_TILES[i] = [];
 			for (let k = 0; k < this.FIELD_SIZE; k++){
-				let test = this.buildChild('gameField', {column: k, row: i, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE), position: [130 * k, 135 * i], event: 'tile'});
-				this.ALL_TILES[i][k] = test;
-				
+				let field = this.buildChild('gameField', {column: k, row: i, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE), position: [130 * k, 135 * i], event: 'tile'});
+				this.ALL_TILES[i][k] = field;
+				// console.log('[' + i + ', ' + k + ']')
 			}
+			
 		}
-		console.log(this.ALL_TILES);
+		this.checkAllField();
+		// console.log(this.ALL_TILES);
 	},
 
 	checkAllField(){
-
+		let transposeMatrix = this.transpose(this.ALL_TILES);
+		let transposeMatrix1 = this.transpose(transposeMatrix);
+		let transpose = false;
 		for (let i = 0; i < this.ALL_TILES.length; i++){
 			
-			for (let k = 0; k < this.ALL_TILES[i].length-1; k++){
-				if (this.ALL_TILES[i][k].params.image === this.ALL_TILES[i][k+1].params.image){
-					//console.log('!!!!');
-					console.log('i: ' + i);
-					console.log('k: ' + k);
-					this.MACTHES.push(this.ALL_TILES[i][k].params.image);
-					
-					//this.MACTHES.push(this.ALL_TILES[i][k+1].params.image);
-					
-					
-					// this.COUNT++;
-					// if (this.COUNT >= 3){
-						
-					// }
-					
-					// console.log(this.ALL_TILES[i][k]);
-					// console.log(i + ', ' + k);
-					
-					this.ALL_TILES[i][k].alpha = 0.5;
-					this.ALL_TILES[i][k+1].alpha = 0.5;
-				}
-				// if ((k+1) < this.ALL_TILES[i].length) {
-				// 	if (this.ALL_TILES[i][k].params.image === this.ALL_TILES[i][k].params.image ){
-				// 		console.log(this.ALL_TILES[i][k]);
-				// 		this.ALL_TILES[i][k].alpha = 0.5;
-				// 	}
-				// }
-				
-				// console.log(this.ALL_TILES[i][k]);
+			// for (let k = 0; k < this.ALL_TILES[i].length - 1; k++){
+			// 	this.findSequence(this.ALL_TILES[i], this.ALL_TILES[i][k], k + 1);
+			// }
+			// for (let k = 0; k < transposeMatrix[i].length - 1; k++){
+			// 	this.findSequence(transposeMatrix1[i], transposeMatrix1[i][k], k + 1, i);
+			// }
+			for (let k = 0; k < transposeMatrix[i].length - 1; k++){
+				this.findSequence(transposeMatrix[i], transposeMatrix[i][k], k + 1, i);
 			}
 		}
-		console.log(this.MACTHES);
-
-		// this.ALL_TILES.map((index, item) => {
-
-		// })
-
-		// this.ALL_TILES.reduce((previousValue, currentItem, index, arr) => {
-		// 	console.log(previousValue)
-		// 	// if (index > 0) {
-		// 	// 	if (currentItem.row == previousValue.row) {
-		// 	// 		this.TILES_ROW.push(previousValue.row)
-		// 	// 	}
-		// 	// }
-		// 	// if (currentItem.row === previousValue.row) {
-		// 	// 	this.TILES_ROW.push(previousValue.row)
-		// 	// }
-		// })
-
-		// let mas = [];
-		// for (let i = 0; i < this.ALL_TILES.length-1; i++){
-		// 	// if (this.ALL_TILES[i+1] === null){
-		// 	// 	return
-		// 	// } else 
-		// 	console.log(this.ALL_TILES[i].row)
-		// 	if (this.ALL_TILES[i].row === this.ALL_TILES[i+1].row){
-		// 		//console.log(this.ALL_TILES[i].row)
-		// 		this.TILES_ROW.push(this.ALL_TILES[i].row);
-		// 	}
-			
-		// }
-		// console.log(this.TILES_ROW)
-		// console.log(this.ALL_TILES[i].row)
-		// this.ALL_TILES.map((index, item) => {
-			
-		// 	if (item.row === )
-		// 	// mas.push(ite)
-		// })
+		console.log(transposeMatrix)
 	},
 
-	// 		for (let i = 0; i < this.TILES_INDEXES.length; i++) {
-			// 	if (this.TILES_INDEXES[i].row === this.TILES[1].row) {
-			// 		this.TILES_ROW.push(this.TILES_INDEXES[i]);
-			// 	}
-		// 	}
+	transpose(matrix){
+		let rows = matrix.length, cols = matrix[0].length;
+		let grid = [];
+		for (let j = 0; j < cols; j++){
+			grid[j] = Array(rows);
+		}
+		for (let i = 0; i < rows; i++){
+			for (let j = 0; j < cols; j++){
+				grid[j][i] = matrix[i][j];
+			}
+		}
+		return grid;
+	},
+
+	// findSequence2(element, j, k){
+	// 	let sequenceLength = 1;
+	// 	let start = j - 1;
+	// 	for (j; element[k][j] && element[k][start] != '' && element[k][start] && element[k][start].params && element[k][start].params.image === element[k][j].params.image; j++){
+	// 		sequenceLength++;
+	// 		if (sequenceLength > 2) {
+	// 			for (start; start <= j; start++){
+					
+	// 				this.ALL_TILES[start][k] = 0;
+	// 			}
+	// 		}
+	// 	}
+	// },
+
+
+	
+
+	findSequence(row, value, j, r){
+		
+		let start = j - 1;
+		let sequenceLength = 1;
+		// this.TEST.push(row);
+		// console.log(this.TEST)
+		for (j; row[j] && row[j].params && row[j].params.image === value.params.image; j++){
+			sequenceLength++;
+			if (sequenceLength > 2) {
+				//console.log(row[start])
+				//console.log(transpose)
+				let start1 = start;
+				let pos = this.ALL_TILES.length - sequenceLength;
+				for (let i = start1 - 1; i >= 0; i--){
+					
+					//this.TEST.push
+					this.animate(
+						1.2, row[i], {position: [row[i].position.x, row[i+sequenceLength].position.y], duration: 1},
+						// '>', this.buildChild('gameField', {column: r, row: start, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE),position: [row[i].position.x, row[i].position.y - 500], event: 'tile'}), {position: [row[i].position.x, row[i].position.y], duration: 1},
+					)
+					//row[i].row = row[i].row + sequenceLength;
+					console.log(row[i])
+				}
+				for (start; start <= j; start++){
+					this.animate(
+						0.50, row[start], {alpha: 0, duration: 1},
+						'>', row[start], {visible: false, duration: 0.1},
+						// () => {
+						// 	this['gameField'].removeChild(row[start]);
+						// }
+					)
+					
+					
+				}
+				for (let i = 0; i < this.ALL_TILES.length-pos; i++){
+					let randomImage = _.sample(this.FIELD_TILE);
+					let test = this.buildChild('gameField', {column: r, row: i, name: 'gameField-cell-tile', type: 'sprite', image: randomImage, position: [row[i].position.x, row[i].position.y-80], event: 'tile', alpha: 0});
+					this.animate(
+						2.00, test, {alpha: 1, position: [row[i].position.x, row[i].position.y], duration: 1},
+					)
+					// row.unshift(test);
+				}
+				// console.log(this.TEST)
+				
+				for (let i = 0; i < sequenceLength; i++){
+
+					//for (start; start <= j; start++)
+					// let field = this.buildChild('gameField', {column: j, row: r, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE), position: [j, pos], event: 'tile'});
+					
+					row.splice(start1, 1);
+
+					//let test = this.ALL_TILES[j][r] = field;
+					//row.unshift(test);
+					
+					
+				}
+				
+				// console.log(sequenceLength)
+				// row.splice(start, sequenceLength);
+				// row.splice(j - 2 , sequenceLength);
+			}
+			
+		}
+		//row.splice(start, sequenceLength, row[start- 1]);
+		
+	},
+
+	
+
 
 	checkMatch(mas){
 
