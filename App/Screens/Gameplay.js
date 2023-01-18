@@ -266,13 +266,17 @@ App.Gameplay = new Screen({
 	},
 
 	buildField(){
+		
 		for (let i = 0; i < this.FIELD_SIZE; i++){
+			this.ALL_TILES[i] = [];
 			for (let k = 0; k < this.FIELD_SIZE; k++){
-				this.buildChild('gameField', {name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k]});
-				let field = this.buildChild('gameField-cell', {column: k, row: i, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE), event: 'tile'});
+				let spriteImage = _.sample(this.FIELD_TILE);
+				let field = this.buildChild('gameField', {column: i, row: k, childSprite: spriteImage,name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k]});
+				this.buildChild('gameField-cell', {name: 'gameField-cell-tile', type: 'sprite', image: spriteImage, event: 'tile'});
 				this.ALL_TILES[i][k] = field;
 			}
 		};
+		console.log(this.ALL_TILES)
 		// for (let i = 0; i < this.FIELD_SIZE; i++){
 		// 	this.ALL_TILES[i] = [];
 		// 	for (let k = 0; k < this.FIELD_SIZE; k++){
@@ -282,7 +286,7 @@ App.Gameplay = new Screen({
 		// 	}
 			
 		// }
-		// this.checkAllField();
+		this.checkAllField();
 		// console.log(this.ALL_TILES);
 	},
 
@@ -291,6 +295,10 @@ App.Gameplay = new Screen({
 		let transposeMatrix1 = this.transpose(transposeMatrix);
 		let transpose = false;
 		for (let i = 0; i < this.ALL_TILES.length; i++){
+
+			for (let k = 0; k < this.ALL_TILES[i].length - 1; k++){
+				this.findSequence2(this.ALL_TILES[i], this.ALL_TILES[i][k], k + 1);
+			}
 			
 			// for (let k = 0; k < this.ALL_TILES[i].length - 1; k++){
 			// 	this.findSequence(this.ALL_TILES[i], this.ALL_TILES[i][k], k + 1);
@@ -302,7 +310,7 @@ App.Gameplay = new Screen({
 			// 	this.findSequence(transposeMatrix[i], transposeMatrix[i][k], k + 1, i);
 			// }
 		}
-		console.log(transposeMatrix)
+		// console.log(transposeMatrix)
 	},
 
 	transpose(matrix){
@@ -319,19 +327,75 @@ App.Gameplay = new Screen({
 		return grid;
 	},
 
-	// findSequence2(element, j, k){
-	// 	let sequenceLength = 1;
-	// 	let start = j - 1;
-	// 	for (j; element[k][j] && element[k][start] != '' && element[k][start] && element[k][start].params && element[k][start].params.image === element[k][j].params.image; j++){
-	// 		sequenceLength++;
-	// 		if (sequenceLength > 2) {
-	// 			for (start; start <= j; start++){
+	findSequence2(row, value, j){
+		let sequenceLength = 1;
+		let start = j - 1;
+		for (j; row[j] && row[j].childSprite && row[j].childSprite === value.childSprite; j++){
+			//console.log(row[j])
+			sequenceLength++;
+			if (sequenceLength > 2) {
+				let start1 = start;
+				for (let i = start1 - 1; i >= 0; i--){
+					this.TEST.push(row[i]);
+					console.log(this.TEST)
+				}
+				for (start; start <= j; start++){
+					let start2 = start;
+					this.animate(
+						0.50, row[start].children[0], {alpha: 0, duration: 1,},
+						() => {
+							// console.log(start)
+							row[start2].removeChildAt(0);
+							// row[start2].addChild(row[start2 - sequenceLength].children[0])
+							for (let i = start1 - 1; i >= 0; i--){
+								// console.log(i+sequenceLength)
+								row[i+sequenceLength].addChild(row[i].children[0])
+								// row[start - sequenceLength].addChild(row[i].children[0])
+								// this.TEST.push(row[i]);
+								// console.log(this.TEST)
+								// this.animate(
+								// 	1.0, row[i+sequenceLength].addChild(row[i].children[0]), {position: [row[i+sequenceLength].x, row[i+sequenceLength].y], duration: 1,},
+								// )
+								// if (i+sequenceLength === start2) {
+								// 	console.log(start2 - i)
+								// 	row[start2 - i].addChild(row[i].children[0]);
+								// } else {
+								// 	row[i+sequenceLength].addChild(row[i].children[0]);
+								// }
+								
+								
+							}
+						}
+					)
 					
-	// 				this.ALL_TILES[start][k] = 0;
-	// 			}
-	// 		}
-	// 	}
-	// },
+				}
+				// for (let i = start1 - 1; i >= 0; i--){
+				// 	console.log(start)
+				// 	for (start; start <= j; start++){}
+				// 	row[start].addChild(row[i].children[0]);
+				// }
+				
+
+				// for (let i = 0; i < this.TEST.length; i++){
+					
+				// }
+
+				// for (let i = 0; i < this.ALL_TILES.length-pos; i++){
+				// 	let randomImage = _.sample(this.FIELD_TILE);
+				// 	let test = this.buildChild('gameField', {column: r, row: i, name: 'gameField-cell-tile', type: 'sprite', image: randomImage, position: [row[i].position.x, row[i].position.y-80], event: 'tile', alpha: 0});
+				// 	this.animate(
+				// 		2.00, test, {alpha: 1, position: [row[i].position.x, row[i].position.y], duration: 1},
+				// 	)
+				// 	// row.unshift(test);
+				// }
+			}
+		}
+
+		
+		// for (j; row[j] && row[j].children[0] === value.childSprite2; j++){
+
+		// }
+	},
 
 
 	
@@ -345,53 +409,49 @@ App.Gameplay = new Screen({
 		for (j; row[j] && row[j].params && row[j].params.image === value.params.image; j++){
 			sequenceLength++;
 			if (sequenceLength > 2) {
-				//console.log(row[start])
-				//console.log(transpose)
 				let start1 = start;
 				let pos = this.ALL_TILES.length - sequenceLength;
-				for (let i = start1 - 1; i >= 0; i--){
-					
-					//this.TEST.push
-					this.animate(
-						1.2, row[i], {position: [row[i].position.x, row[i+sequenceLength].position.y], duration: 1},
-						// '>', this.buildChild('gameField', {column: r, row: start, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE),position: [row[i].position.x, row[i].position.y - 500], event: 'tile'}), {position: [row[i].position.x, row[i].position.y], duration: 1},
-					)
-					//row[i].row = row[i].row + sequenceLength;
-					console.log(row[i])
-				}
-				for (start; start <= j; start++){
-					this.animate(
-						0.50, row[start], {alpha: 0, duration: 1},
-						'>', row[start], {visible: false, duration: 0.1},
-						// () => {
-						// 	this['gameField'].removeChild(row[start]);
-						// }
-					)
+
+
+				// for (let i = start1 - 1; i >= 0; i--){
+				// 	this.animate(
+				// 		1.2, row[i], {position: [row[i].position.x, row[i+sequenceLength].position.y], duration: 1},
+				// 		// '>', this.buildChild('gameField', {column: r, row: start, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE),position: [row[i].position.x, row[i].position.y - 500], event: 'tile'}), {position: [row[i].position.x, row[i].position.y], duration: 1},
+				// 	)
+				// }
+				// for (start; start <= j; start++){
+				// 	this.animate(
+				// 		0.50, row[start], {alpha: 0, duration: 1},
+				// 		'>', row[start], {visible: false, duration: 0.1},
+				// 		// () => {
+				// 		// 	this['gameField'].removeChild(row[start]);
+				// 		// }
+				// 	)
 					
 					
-				}
-				for (let i = 0; i < this.ALL_TILES.length-pos; i++){
-					let randomImage = _.sample(this.FIELD_TILE);
-					let test = this.buildChild('gameField', {column: r, row: i, name: 'gameField-cell-tile', type: 'sprite', image: randomImage, position: [row[i].position.x, row[i].position.y-80], event: 'tile', alpha: 0});
-					this.animate(
-						2.00, test, {alpha: 1, position: [row[i].position.x, row[i].position.y], duration: 1},
-					)
-					// row.unshift(test);
-				}
-				// console.log(this.TEST)
+				// }
+				// for (let i = 0; i < this.ALL_TILES.length-pos; i++){
+				// 	let randomImage = _.sample(this.FIELD_TILE);
+				// 	let test = this.buildChild('gameField', {column: r, row: i, name: 'gameField-cell-tile', type: 'sprite', image: randomImage, position: [row[i].position.x, row[i].position.y-80], event: 'tile', alpha: 0});
+				// 	this.animate(
+				// 		2.00, test, {alpha: 1, position: [row[i].position.x, row[i].position.y], duration: 1},
+				// 	)
+				// 	// row.unshift(test);
+				// }
+				// // console.log(this.TEST)
 				
-				for (let i = 0; i < sequenceLength; i++){
+				// for (let i = 0; i < sequenceLength; i++){
 
-					//for (start; start <= j; start++)
-					// let field = this.buildChild('gameField', {column: j, row: r, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE), position: [j, pos], event: 'tile'});
+				// 	//for (start; start <= j; start++)
+				// 	// let field = this.buildChild('gameField', {column: j, row: r, name: 'gameField-cell-tile', type: 'sprite', image: _.sample(this.FIELD_TILE), position: [j, pos], event: 'tile'});
 					
-					row.splice(start1, 1);
+				// 	row.splice(start1, 1);
 
-					//let test = this.ALL_TILES[j][r] = field;
-					//row.unshift(test);
+				// 	//let test = this.ALL_TILES[j][r] = field;
+				// 	//row.unshift(test);
 					
 					
-				}
+				// }
 				
 				// console.log(sequenceLength)
 				// row.splice(start, sequenceLength);
