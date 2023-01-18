@@ -160,6 +160,8 @@ App.Gameplay = new Screen({
 				});
 
 			}
+			this.checkAllField();
+			this.changeItems();
 
 		},
 
@@ -286,8 +288,8 @@ App.Gameplay = new Screen({
 		// 	}
 			
 		// }
-		this.checkAllField();
-		// console.log(this.ALL_TILES);
+		
+		console.log(this.ALL_TILES);
 	},
 
 	checkAllField(){
@@ -296,9 +298,11 @@ App.Gameplay = new Screen({
 		let transpose = false;
 		for (let i = 0; i < this.ALL_TILES.length; i++){
 
-			for (let k = 0; k < this.ALL_TILES[i].length - 1; k++){
+			for (let k = 0; k < this.ALL_TILES[i].length; k++){
 				this.findSequence2(this.ALL_TILES[i], this.ALL_TILES[i][k], k + 1);
 			}
+
+			
 			
 			// for (let k = 0; k < this.ALL_TILES[i].length - 1; k++){
 			// 	this.findSequence(this.ALL_TILES[i], this.ALL_TILES[i][k], k + 1);
@@ -310,6 +314,8 @@ App.Gameplay = new Screen({
 			// 	this.findSequence(transposeMatrix[i], transposeMatrix[i][k], k + 1, i);
 			// }
 		}
+		// console.log(this.ALL_TILES)
+		
 		// console.log(transposeMatrix)
 	},
 
@@ -331,72 +337,50 @@ App.Gameplay = new Screen({
 		let sequenceLength = 1;
 		let start = j - 1;
 		for (j; row[j] && row[j].childSprite && row[j].childSprite === value.childSprite; j++){
-			//console.log(row[j])
 			sequenceLength++;
 			if (sequenceLength > 2) {
-				let start1 = start;
-				for (let i = start1 - 1; i >= 0; i--){
-					this.TEST.push(row[i]);
-					console.log(this.TEST)
-				}
-				for (start; start <= j; start++){
-					let start2 = start;
-					this.animate(
-						0.50, row[start].children[0], {alpha: 0, duration: 1,},
-						() => {
-							// console.log(start)
-							row[start2].removeChildAt(0);
-							// row[start2].addChild(row[start2 - sequenceLength].children[0])
-							for (let i = start1 - 1; i >= 0; i--){
-								// console.log(i+sequenceLength)
-								if (row[i] && row[i].children && row[i].children[0]){
-									row[i+sequenceLength].addChild(row[i].children[0])
-								}
-								
-								// row[start - sequenceLength].addChild(row[i].children[0])
-								// this.TEST.push(row[i]);
-								// console.log(this.TEST)
-								// this.animate(
-								// 	1.0, row[i+sequenceLength].addChild(row[i].children[0]), {position: [row[i+sequenceLength].x, row[i+sequenceLength].y], duration: 1,},
-								// )
-								// if (i+sequenceLength === start2) {
-								// 	console.log(start2 - i)
-								// 	row[start2 - i].addChild(row[i].children[0]);
-								// } else {
-								// 	row[i+sequenceLength].addChild(row[i].children[0]);
-								// }
-								
-								
-							}
-						}
-					)
-					
-				}
-				// for (let i = start1 - 1; i >= 0; i--){
-				// 	console.log(start)
-				// 	for (start; start <= j; start++){}
-				// 	row[start].addChild(row[i].children[0]);
-				// }
 				
+				for (start; start <= j; start++){
+					let start1 = start;
+					// this.animate(
+					// 	0.00, row[start].children[0], {alpha: 0},
+					// 	() => {
+							
+					// 		if (row[start1].children[0]){
+					// 			// row[start1].removeChildAt(0);
+					// 			// console.log(row[start1].children)
+					// 			// row[start1].children = 0;
+					// 		}
+							
+					// 	}
+					// )
+					row[start1].removeChildAt(0);
+				}
+			}
+		}
+		
+	},
 
-				// for (let i = 0; i < this.TEST.length; i++){
-					
-				// }
-
-				// for (let i = 0; i < this.ALL_TILES.length-pos; i++){
-				// 	let randomImage = _.sample(this.FIELD_TILE);
-				// 	let test = this.buildChild('gameField', {column: r, row: i, name: 'gameField-cell-tile', type: 'sprite', image: randomImage, position: [row[i].position.x, row[i].position.y-80], event: 'tile', alpha: 0});
-				// 	this.animate(
-				// 		2.00, test, {alpha: 1, position: [row[i].position.x, row[i].position.y], duration: 1},
-				// 	)
-				// 	// row.unshift(test);
+	changeItems(){
+		for (let i = 0; i < this.ALL_TILES.length; i++) {
+			for (let k = 0; k < this.ALL_TILES[i].length; k++){
+				// this.changeItems(this.ALL_TILES[i], this.ALL_TILES[i][k], k);
+				let row = this.ALL_TILES[i];
+				let item = this.ALL_TILES[i][k];
+				console.log(!this.ALL_TILES[i][k].children)
+				// if (!this.ALL_TILES[i][k].children[0]) {
+				// 	item.addChild(row[k-1].children[0]);
 				// }
 			}
 		}
-
-		
-		// for (j; row[j] && row[j].children[0] === value.childSprite2; j++){
-
+		return
+		// for (0; row[j] && row[j].children[0] === 0; j++){
+		// 	for (let i = j - 2; i >= 0; i--) {
+		// 		row[j].addChild(row[i].children);
+		// 	}
+		// 	// for (let i = 0; i < row.length; i++){
+		// 	// 	row[j].addChild(row[i].children[0])
+		// 	// }
 		// }
 	},
 
