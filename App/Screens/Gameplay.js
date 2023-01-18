@@ -349,7 +349,10 @@ App.Gameplay = new Screen({
 							// row[start2].addChild(row[start2 - sequenceLength].children[0])
 							for (let i = start1 - 1; i >= 0; i--){
 								// console.log(i+sequenceLength)
-								row[i+sequenceLength].addChild(row[i].children[0])
+								if (row[i] && row[i].children && row[i].children[0]){
+									row[i+sequenceLength].addChild(row[i].children[0])
+								}
+								
 								// row[start - sequenceLength].addChild(row[i].children[0])
 								// this.TEST.push(row[i]);
 								// console.log(this.TEST)
