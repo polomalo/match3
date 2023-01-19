@@ -69,7 +69,7 @@ App.Gameplay = new Screen({
 
 			this.FIELD_SIZE = 8;
 			this.FIELD_TILE = ['banana', 'coco', 'grape', 'lemon', 'lime', 'pear'];
-			this.FIELD_TILE_NUMBER = [1, 2, 3, 4, 5, 6];
+			this.FIELD_TILE_NUMBER = [1, 2];
 			this.COUNT_TILES = 0;
 
 			this.TILES_NUMBER = [];
@@ -82,6 +82,8 @@ App.Gameplay = new Screen({
 			this.MACTHES = [];
 			this.TEST = [];
 			this.CHANGES = false;
+			this.TRANSPOSE_MATRIX;
+			
 
 		},
 
@@ -93,35 +95,46 @@ App.Gameplay = new Screen({
 
 			
 			this.numberField();
+			// this.TRANSPOSE_MATRIX = this.transpose(this.TILES_NUMBER);
+			// console.log('transpose matrix',this.transpose(this.TILES_NUMBER))
 			console.log(JSON.stringify(this.TILES_NUMBER))
 			this.buildField();
 			// this.animate(
 			// 	0.00, this['gameField'], {alpha: 1, duration: 3},
 			// )
 			
-			this.checkSequance();
-			if (this.CHANGES){
-				this.checkSequance();
+			let result = this.checkSequance();
+			// console.log('result', result);
+			let iterations = 0;
+			while (result) {
+				console.log('iterations', iterations++);
+				this['gameField'].removeChildren(0, 64);
+				this.buildField();
+				// console.log(JSON.stringify(this.TILES_NUMBER))
+				this.switchNumbers();
+				// console.log(JSON.stringify(this.TILES_NUMBER))
+				this['gameField'].removeChildren(0, 64);
+				this.buildField();
+				this.changeTiles();
+				// console.log(JSON.stringify(this.TILES_NUMBER))
+				// // console.log(this.TILES_NUMBER)
+				this.buildField();
+				result = this.checkSequance();
+				// this.checkSequance();
 			}
-			// console.log(this.CHANGES)
-			// if (this.checkSequance()) {
-			// 	console.log(JSON.stringify(this.TILES_NUMBER))
-			// 	this['gameField'].removeChildren(0, 64);
-			// 	this.buildField();
-			// 	this.switchNumbers();
-			// 	console.log(JSON.stringify(this.TILES_NUMBER))
-			// 	this['gameField'].removeChildren(0, 64);
-			// 	this.buildField();
-			// 	this.changeTiles();
-			// 	console.log(JSON.stringify(this.TILES_NUMBER))
-			// 	// console.log(this.TILES_NUMBER)
-			// 	this.buildField();
+
+			// this.checkSequance();
+			// if (this.CHANGES){
+			// 	this.checkSequance();
 			// }
 			
 			
 		},
 
 		'Gameplay tile click': function(sprite) {
+			// console.log(event)
+			// console.log(this.TILES_NUMBER[row][colu])
+
 			// this.TILES.push(sprite);
 			// console.log(this.TILES[0].row);
 			// if (this.TILES.length == 2) {
@@ -292,46 +305,80 @@ App.Gameplay = new Screen({
 				this.TILES_NUMBER[i][k] = _.sample(this.FIELD_TILE_NUMBER);
 			}
 		}
-		// console.log(this.TILES_NUMBER)
+		// console.log('normal matrix', this.TILES_NUMBER)
 		
 		
-		// console.log(this.TILES_NUMBER)
+		
 	},
 
 	checkSequance(){
+		let result1 = false;
+		let result2 = false;
+		
+		let transposeMatrix = this.transpose(this.TILES_NUMBER)
+		// console.log('333', transposeMatrix)
 		for (let i = 0; i < this.TILES_NUMBER.length; i++){
 			for (let k = 0; k < this.TILES_NUMBER[i].length; k++){
-				this.findSequence(this.TILES_NUMBER[i], this.TILES_NUMBER[i][k], k + 1)
-				// this.buildField();
+				let r = this.findSequence(this.TILES_NUMBER[i], this.TILES_NUMBER[i][k], k + 1);
+				if (!result1) result1 = r;
 				
 			}
 			
-			for (let k = 0; k < this.transpose(this.TILES_NUMBER[i]).length; k++){
-				
-				this.findSequence(this.transpose(this.TILES_NUMBER[i]), this.transpose(this.TILES_NUMBER[i][k]), k + 1)
+			// for (let k = 0; k < transposeMatrix[i].length; k++){
+			// 	let r = this.findSequence(transposeMatrix[i], transposeMatrix[i][k], k + 1);
+			// 	if (!result2) result2 = r;
+			// }
+			// console.log('!!!',this.transpose(this.TILES_NUMBER))
+		}
+		for (let i = 0; i < transposeMatrix.length; i++) {
+			for (let k = 0; k < transposeMatrix[i].length; k++){
+				let r = this.findSequence(transposeMatrix[i], transposeMatrix[i][k], k + 1);
+				if (!result2) result2 = r;
 			}
 		}
-		console.log(this.CHANGES);
-		if (this.CHANGES) {
-			this['gameField'].removeChildren(0, 64)
-			// this.animate(
-			// 	4.00, this.buildField(), {alpha: 1},
-			// )
-			
-			this.buildField();
-			console.log(JSON.stringify(this.TILES_NUMBER))
-			this.switchNumbers();
-			console.log(JSON.stringify(this.TILES_NUMBER))
-			this['gameField'].removeChildren(0, 64);
-			this.buildField();
-			this.changeTiles();
-			console.log(JSON.stringify(this.TILES_NUMBER))
-			// // console.log(this.TILES_NUMBER)
-			this.buildField();
-			// this.checkSequance();
+		let norm = this.transpose(transposeMatrix);
+		for (let i = 0; i < norm.length; i++){
+			for (let k = 0; k < norm[i].length; k++){
+				if (norm[i][k] === 0) {
+					this.TILES_NUMBER[i][k] = 0;
+				}
+			}
 		}
+		// for (let i = 0; i < this.transpose(this.TILES_NUMBER).length; i++){
+		// 	for (let k = 0; k < this.transpose(this.TILES_NUMBER[i]).length; k++){
+		// 		let r = this.findSequence(this.transpose(this.TILES_NUMBER[i]), this.transpose(this.TILES_NUMBER[i][k]), k + 1);
+		// 		if (!result1) result1 = r;
+				
+		// 	}
+		// }
+			
+		// 	for (let k = 0; k < this.transpose(this.TILES_NUMBER[i]).length; k++){
+		// 		let r = this.findSequence(this.transpose(this.TILES_NUMBER[i]), this.transpose(this.TILES_NUMBER[i][k]), k + 1);
+		// 		if (!result2) result2 = r;
+		// 	}
+		// }
+		// console.log(this.CHANGES);
+		// if (this.CHANGES) {
+		// 	this['gameField'].removeChildren(0, 64)
+		// 	// this.animate(
+		// 	// 	4.00, this.buildField(), {alpha: 1},
+		// 	// )
+			
+		// 	this.buildField();
+		// 	console.log(JSON.stringify(this.TILES_NUMBER))
+		// 	this.switchNumbers();
+		// 	console.log(JSON.stringify(this.TILES_NUMBER))
+		// 	this['gameField'].removeChildren(0, 64);
+		// 	this.buildField();
+		// 	this.changeTiles();
+		// 	console.log(JSON.stringify(this.TILES_NUMBER))
+		// 	// // console.log(this.TILES_NUMBER)
+		// 	this.buildField();
+		// 	// this.checkSequance();
+		// }
 		
-		console.log(this.TILES_NUMBER);
+		console.log('rrr', result1, result2, this.CHANGES);
+		return result1 || result2;
 		// this.buildField();
 	},
 
@@ -340,17 +387,18 @@ App.Gameplay = new Screen({
 		let start = j - 1;
 		for (j; row[j] === value; j++){
 			sequenceLength++;
-			if (sequenceLength > 2) {
+			if (sequenceLength > 1) {
 				for (start; start <= j; start++){
 					row[start] = 0;
 					
 				}
 				this.CHANGES = true;
-				
+				return true;
 			}
 		}
+		this.CHANGES = false;
 		// console.log(changes)
-		// return changes;
+		return false;
 		
 	},
 
@@ -369,9 +417,9 @@ App.Gameplay = new Screen({
 			for (let k = 0; k < this.TILES_NUMBER[i].length; k++){
 				if (this.TILES_NUMBER[i][k] === 0) {
 					let randomNumber = _.sample(this.FIELD_TILE_NUMBER)
-					console.log('[' + i + ', ' + k + '] = ' +  this.TILES_NUMBER[i][k]);
+					// console.log('[' + i + ', ' + k + '] = ' +  this.TILES_NUMBER[i][k]);
 					this.TILES_NUMBER[i][k] = randomNumber;
-					console.log(randomNumber);
+					// console.log(randomNumber);
 					
 				}
 			}
