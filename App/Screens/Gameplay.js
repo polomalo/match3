@@ -30,7 +30,7 @@ App.Gameplay = new Screen({
 				{name: 'header-timer', type: 'sprite', image: 'header-timer', position: [370, -770]},
 				// {name: 'delivery text', type: 'text', text: 'DELIVERY', position: [-70, -700], event: true}
 			]},
-			{name: 'gameField', positionPortrait: [-455, -400], alpha: 0, childs: [
+			{name: 'gameField', positionPortrait: [-455, -400], childs: [
 				
 			]}
 
@@ -81,7 +81,7 @@ App.Gameplay = new Screen({
 			this.COUNT = 0;
 			this.MACTHES = [];
 			this.TEST = [];
-			
+			this.CHANGES = false;
 
 		},
 
@@ -93,19 +93,31 @@ App.Gameplay = new Screen({
 
 			
 			this.numberField();
-			this.animate(
-				0.00, this['gameField'], {alpha: 1, duration: 3},
-			)
+			console.log(JSON.stringify(this.TILES_NUMBER))
+			this.buildField();
+			// this.animate(
+			// 	0.00, this['gameField'], {alpha: 1, duration: 3},
+			// )
 			
 			this.checkSequance();
-			this['gameField'].removeChildren(0, 64);
-			this.buildField();
-			this.switchNumbers();
-			this['gameField'].removeChildren(0, 64);
-			this.buildField();
-			this.changeTiles();
-			// console.log(this.TILES_NUMBER)
-			this.buildField();
+			if (this.CHANGES){
+				this.checkSequance();
+			}
+			// console.log(this.CHANGES)
+			// if (this.checkSequance()) {
+			// 	console.log(JSON.stringify(this.TILES_NUMBER))
+			// 	this['gameField'].removeChildren(0, 64);
+			// 	this.buildField();
+			// 	this.switchNumbers();
+			// 	console.log(JSON.stringify(this.TILES_NUMBER))
+			// 	this['gameField'].removeChildren(0, 64);
+			// 	this.buildField();
+			// 	this.changeTiles();
+			// 	console.log(JSON.stringify(this.TILES_NUMBER))
+			// 	// console.log(this.TILES_NUMBER)
+			// 	this.buildField();
+			// }
+			
 			
 		},
 
@@ -283,7 +295,7 @@ App.Gameplay = new Screen({
 		// console.log(this.TILES_NUMBER)
 		
 		
-		console.log(this.TILES_NUMBER)
+		// console.log(this.TILES_NUMBER)
 	},
 
 	checkSequance(){
@@ -291,6 +303,7 @@ App.Gameplay = new Screen({
 			for (let k = 0; k < this.TILES_NUMBER[i].length; k++){
 				this.findSequence(this.TILES_NUMBER[i], this.TILES_NUMBER[i][k], k + 1)
 				// this.buildField();
+				
 			}
 			
 			for (let k = 0; k < this.transpose(this.TILES_NUMBER[i]).length; k++){
@@ -298,9 +311,27 @@ App.Gameplay = new Screen({
 				this.findSequence(this.transpose(this.TILES_NUMBER[i]), this.transpose(this.TILES_NUMBER[i][k]), k + 1)
 			}
 		}
+		console.log(this.CHANGES);
+		if (this.CHANGES) {
+			this['gameField'].removeChildren(0, 64)
+			// this.animate(
+			// 	4.00, this.buildField(), {alpha: 1},
+			// )
+			
+			this.buildField();
+			console.log(JSON.stringify(this.TILES_NUMBER))
+			this.switchNumbers();
+			console.log(JSON.stringify(this.TILES_NUMBER))
+			this['gameField'].removeChildren(0, 64);
+			this.buildField();
+			this.changeTiles();
+			console.log(JSON.stringify(this.TILES_NUMBER))
+			// // console.log(this.TILES_NUMBER)
+			this.buildField();
+			// this.checkSequance();
+		}
 		
-		
-		console.log(this.transpose(this.TILES_NUMBER));
+		console.log(this.TILES_NUMBER);
 		// this.buildField();
 	},
 
@@ -312,9 +343,14 @@ App.Gameplay = new Screen({
 			if (sequenceLength > 2) {
 				for (start; start <= j; start++){
 					row[start] = 0;
+					
 				}
+				this.CHANGES = true;
+				
 			}
 		}
+		// console.log(changes)
+		// return changes;
 		
 	},
 
@@ -336,6 +372,7 @@ App.Gameplay = new Screen({
 					console.log('[' + i + ', ' + k + '] = ' +  this.TILES_NUMBER[i][k]);
 					this.TILES_NUMBER[i][k] = randomNumber;
 					console.log(randomNumber);
+					
 				}
 			}
 		}
@@ -356,7 +393,7 @@ App.Gameplay = new Screen({
 	},
 
 	buildField(){
-		console.log(this.TILES_NUMBER)
+		// console.log(this.TILES_NUMBER)
 		for (let i = 0; i < this.TILES_NUMBER.length; i++){
 			for (let k = 0; k < this.TILES_NUMBER[i].length; k++){
 				switch(this.TILES_NUMBER[i][k]){
