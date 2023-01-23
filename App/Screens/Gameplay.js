@@ -118,6 +118,7 @@ App.Gameplay = new Screen({
 		},
 
 		'Gameplay tile click': function(sprite) {
+			this.pulsation(sprite.children)
 			this.SELECTED_ITEMS.push(sprite)
 			if (this.SELECTED_ITEMS.length > 1) {
 				this.TILES_NUMBER[this.SELECTED_ITEMS[1].column][this.SELECTED_ITEMS[1].row] = this.SELECTED_ITEMS[0].elementNumber;
@@ -130,7 +131,7 @@ App.Gameplay = new Screen({
 					this.TILES_NUMBER[this.SELECTED_ITEMS[0].column][this.SELECTED_ITEMS[0].row] = this.SELECTED_ITEMS[0].elementNumber;
 					setTimeout(() => {
 						this.buildField();
-					},200)
+					},500)
 					
 					console.log("mo match")
 				}
@@ -294,15 +295,18 @@ App.Gameplay = new Screen({
 		// 	}, 1000)
 			
 		// }, 1000)
-		for (let i = 0; i < this.TILES_NUMBER.length; i++){
-			for (let k = 0;k < this.TILES_NUMBER[i].length; k++){
-				if (this.TILES_NUMBER[i][k] === 0){
-					this.animate(
-						0.00, this.TEST[i][k].children, {alpha: 0, duration: 0.3}
-					)
+		setTimeout(() => {
+			for (let i = 0; i < this.TILES_NUMBER.length; i++){
+				for (let k = 0;k < this.TILES_NUMBER[i].length; k++){
+					if (this.TILES_NUMBER[i][k] === 0){
+						this.animate(
+							0.00, this.TEST[i][k].children, {alpha: 0, duration: 0.4}
+						)
+					}
 				}
 			}
-		}
+		}, 500)
+		
 		
 		setTimeout(() => {
 			this.buildField();
@@ -314,31 +318,10 @@ App.Gameplay = new Screen({
 							sequenceLength1++;
 							for (let j = k - 1; j >= 0; j--){
 								if (this.TILES_NUMBER[i][j] !== 0){
-									this.REMAINING_TILES.push(this.TEST[i][j]);
-									// console.log(this.REMAINING_TILES)
-									// this.buildChild(this.TEST[i][j + sequenceLength1], this.TEST[i][j])
-									// this.TILES_NUMBER[i][j] = this.TILES_NUMBER[i][j + sequenceLength1]
 									this.animate(
-										0.00, this.TEST[i][j].children, {/*position: [this.TEST[i][j].position.x, this.TEST[i][j + sequenceLength1].position.y],*/ alpha: 0, duration: 0.2}
+										0.00, this.TEST[i][j].children, {alpha: 0, duration: 0.2}
 									)
-									setTimeout(() => {
-										this.switchNumbers();
-										this.buildField();
-										setTimeout(() => {
-											
-											this.changeTiles();
-											setTimeout(() => {
-												
-												this.buildField();
-												setTimeout(() => {
-													result = this.checkSequance();
-													return this.recursion(result);
-												}, 200)
-												
-											}, 200)
-											
-										}, 200)
-									}, 300)
+									
 								} 
 								else {
 									sequenceLength1 = 0;
@@ -351,8 +334,20 @@ App.Gameplay = new Screen({
 						}
 					}
 				}
-			}, 200)
-		}, 300)
+			}, 200);
+			setTimeout(() => {
+				this.switchNumbers();
+				this.buildField();
+				this.changeTiles();
+					setTimeout(() => {
+						
+						this.buildField();
+						result = this.checkSequance();
+						return this.recursion(result);
+						
+					}, 200)
+			}, 500)
+		}, 1000)
 		// this.buildField();
 			
 		// this.animate(
