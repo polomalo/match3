@@ -88,5 +88,8 @@
   },
   "engines": {
     "node": "10.24.1"
+  },
+  "dependencies": {
+    "@pixi/layers": "^2.0.1"
   }
 }
