@@ -70,22 +70,9 @@ App.Gameplay = new Screen({
 			this.FIELD_SIZE = 8;
 			this.FIELD_TILE = ['banana', 'coco', 'grape', 'lemon', 'lime', 'pear'];
 			this.FIELD_TILE_NUMBER = [1, 2, 3, 4, 5, 6];
-			this.COUNT_TILES = 0;
-
 			this.SELECTED_ITEMS = [];
-			this.REMAINING_TILES = [];
-
 			this.TILES_NUMBER = [];
-			this.ALL_TILES = [];
-			this.ALL_TILES2 = [];
-			//this.TEST = [];
-
-			this.TILES_ROW = [];
-			this.COUNT = 0;
-			this.MACTHES = [];
-			this.TEST = [];
-			this.CHANGES = false;
-			this.TRANSPOSE_MATRIX;
+			this.SPRITE_TILES = [];
 			this.ANIM = true;
 
 		},
@@ -95,21 +82,13 @@ App.Gameplay = new Screen({
 
 			this['debug background'].visible = Settings["debug"];
 			
-			// App.CallToAction.show();
-			
 			this.numberField();
-			
-			
-			
-			
-			
 		},
 
 		'Gameplay tile click': function(sprite) {
 			this.pulsation(sprite.children)
 			this.SELECTED_ITEMS.push(sprite)
 			if (this.SELECTED_ITEMS.length > 1) {
-				
 				this.TILES_NUMBER[this.SELECTED_ITEMS[1].column][this.SELECTED_ITEMS[1].row] = this.SELECTED_ITEMS[0].elementNumber;
 				this.TILES_NUMBER[this.SELECTED_ITEMS[0].column][this.SELECTED_ITEMS[0].row] = this.SELECTED_ITEMS[1].elementNumber;
 				this.buildField();
@@ -122,10 +101,8 @@ App.Gameplay = new Screen({
 					setTimeout(() => {
 						this.buildField();
 					},500)
-					
 					console.log("mo match")
 				}
-				
 				this.SELECTED_ITEMS = []
 			}
 			
@@ -160,10 +137,6 @@ App.Gameplay = new Screen({
 				});
 
 			}
-
-			
-			
-			
 		},
 
 		// Стандартное событие срабатывающее на каждый тик / каждую перерисовку экрана
@@ -283,8 +256,6 @@ App.Gameplay = new Screen({
 					"letterSpacing": 12
 				}
 				if (seconds_left < 10) {
-					// this.Settings.Localization.en.TIME.text = '00:0'+seconds_left;
-					// console.log(this.Settings.Localization.en.TIME.text)
 					let time = this.buildChild('header',{name: 'time', type: 'text', text: '00:0'+seconds_left, positionPortrait: [360, -620], positionLandscape: [-400, 120]});
 					
 					this.setTextStyles(time, styles)
@@ -295,9 +266,17 @@ App.Gameplay = new Screen({
 				if (seconds_left <= 0)
 				{
 					clearInterval(interval);
-					App.Gameplay.hide();
-					this['gameField'].removeChildren();
-					App.CallToAction.show();
+					for (let i = 0; i < this.TILES_NUMBER.length; i++){
+						for (let k = 0;k < this.TILES_NUMBER[i].length; k++){
+							this.animate(
+								0.00, this.SPRITE_TILES[i][k], {position: [2000, this.SPRITE_TILES[i][k].position.y], duration: 0.5, delay: 0.5 * k},
+							)
+						}
+					}
+					setTimeout(() => {
+						App.Gameplay.hide();
+						App.CallToAction.show();
+					}, 4000)
 				}
 			}, 1000);
 		}, 3500)
@@ -306,7 +285,6 @@ App.Gameplay = new Screen({
 
 	recursive(){
 		let result = this.checkSequance();
-		// this.buildField();
 		return this.recursion(result);
 	},
 
@@ -320,11 +298,8 @@ App.Gameplay = new Screen({
 			for (let i = 0; i < this.TILES_NUMBER.length; i++){
 				for (let k = 0;k < this.TILES_NUMBER[i].length; k++){
 					if (this.TILES_NUMBER[i][k] === 0){
-						this.chaoticMotion(this.TEST[i][k].children)
-						this.fadeTo(this.TEST[i][k].children, 0, 0.2, delay = 0.5)
-						// this.animate(
-						// 	0.00, this.TEST[i][k].children, {alpha: 0, duration: 0.4}
-						// )
+						this.chaoticMotion(this.SPRITE_TILES[i][k].children)
+						this.fadeTo(this.SPRITE_TILES[i][k].children, 0, 0.2, delay = 0.5)
 					}
 				}
 			}
@@ -341,12 +316,11 @@ App.Gameplay = new Screen({
 							sequenceLength1++;
 							for (let j = k - 1; j >= 0; j--){
 								if (this.TILES_NUMBER[i][j] !== 0){
-									this.fadeTo(this.TEST[i][j].children, 0, 0.2)
+									this.fadeTo(this.SPRITE_TILES[i][j].children, 0, 0.2)
 								} 
 								else {
 									sequenceLength1 = 0;
 								}
-								
 							}
 						}
 						else {
@@ -358,7 +332,6 @@ App.Gameplay = new Screen({
 			setTimeout(() => {
 				this.switchNumbers();
 				this.buildField(this.ANIM = false);
-				
 					setTimeout(() => {
 						this.changeTiles();
 						this.buildField(this.ANIM = false);
@@ -377,9 +350,6 @@ App.Gameplay = new Screen({
 				this.TILES_NUMBER[i][k] = _.sample(this.FIELD_TILE_NUMBER);
 			}
 		}
-		
-		
-		
 	},
 
 	checkSequance(){
@@ -420,7 +390,6 @@ App.Gameplay = new Screen({
 				for (start; start <= j; start++){
 					row[start] = 0;
 				}
-				this.CHANGES = true;
 				
 			}
 		}
@@ -447,9 +416,6 @@ App.Gameplay = new Screen({
 					this.TILES_NUMBER[i][k] = randomNumber;
 					child = this.buildChild('gameField', {name: 'gameField-cell', position: [130 * i, 135 * k], type: 'sprite', image: this.FIELD_TILE[randomNumber-1], alpha: 0, elementNumber: randomNumber});
 					this.fadeTo(child.children, 0, 0.2)
-					// this.animate(
-					// 	0.00, child, {alpha: 1, duration: 0.2}, 
-					// )
 				}
 			}
 		}
@@ -473,11 +439,10 @@ App.Gameplay = new Screen({
 		this['gameField'].removeChildren();
 		let item, child;
 		for (let i = 0; i < this.TILES_NUMBER.length; i++){
-			this.TEST[i] = []
+			this.SPRITE_TILES[i] = []
 			for (let k = 0; k < this.TILES_NUMBER[i].length; k++){
 				switch(this.TILES_NUMBER[i][k]){
 					case 1:
-						
 						item = this.buildChild('gameField', {column: i, row: k, childSprite: this.FIELD_TILE[0], name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k], event: 'tile', elementNumber: 1});
 						child = this.buildChild('gameField-cell', {name: 'gameField-cell-tile', type: 'sprite', image: this.FIELD_TILE[0]});
 						if (anim) {
@@ -486,8 +451,7 @@ App.Gameplay = new Screen({
 								0.00, item, {position: [item.position.x, item.position.y], delay: 0.5 * k, duration: 0.5}
 							)
 						}
-						
-						this.TEST[i][k] = item;
+						this.SPRITE_TILES[i][k] = item;
 						break;
 					case 2:
 						item = this.buildChild('gameField', {column: i, row: k, childSprite: this.FIELD_TILE[1], name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k], event: 'tile', elementNumber: 2});
@@ -498,8 +462,7 @@ App.Gameplay = new Screen({
 								0.00, item, {position: [item.position.x, item.position.y], delay: 0.5 * k, duration: 0.5}
 							)
 						}
-						
-						this.TEST[i][k] = item;
+						this.SPRITE_TILES[i][k] = item;
 						break;
 					case 3:
 						item = this.buildChild('gameField', {column: i, row: k, childSprite: this.FIELD_TILE[2], name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k], event: 'tile', elementNumber: 3});
@@ -510,8 +473,7 @@ App.Gameplay = new Screen({
 								0.00, item, {position: [item.position.x, item.position.y], delay: 0.5 * k, duration: 0.5}
 							)
 						}
-						
-						this.TEST[i][k] = item;
+						this.SPRITE_TILES[i][k] = item;
 						break;
 					case 4:
 						item = this.buildChild('gameField', {column: i, row: k, childSprite: this.FIELD_TILE[3], name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k], event: 'tile', elementNumber: 4});
@@ -522,8 +484,7 @@ App.Gameplay = new Screen({
 								0.00, item, {position: [item.position.x, item.position.y], delay: 0.5 * k, duration: 0.5}
 							)
 						}
-						
-						this.TEST[i][k] = item;
+						this.SPRITE_TILES[i][k] = item;
 						break;
 					case 5:
 						item = this.buildChild('gameField', {column: i, row: k, childSprite: this.FIELD_TILE[4], name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k], event: 'tile', elementNumber: 5});
@@ -534,8 +495,7 @@ App.Gameplay = new Screen({
 								0.00, item, {position: [item.position.x, item.position.y], delay: 0.5 * k, duration: 0.5}
 							)
 						}
-						
-						this.TEST[i][k] = item;
+						this.SPRITE_TILES[i][k] = item;
 						break;
 					case 6:
 						item = this.buildChild('gameField', {column: i, row: k, childSprite: this.FIELD_TILE[5], name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k], event: 'tile', elementNumber: 6});
@@ -546,12 +506,11 @@ App.Gameplay = new Screen({
 								0.00, item, {position: [item.position.x, item.position.y], delay: 0.5 * k, duration: 0.5}
 							)
 						}
-						
-						this.TEST[i][k] = item;
+						this.SPRITE_TILES[i][k] = item;
 						break;
 					default:
 						item  = this.buildChild('gameField', {column: i, row: k, childSprite: 'empty', name: 'gameField-cell', type: 'sprite', image: 'gameField-cell', position: [130 * i, 135 * k]});
-						this.TEST[i][k] = item;
+						this.SPRITE_TILES[i][k] = item;
 						break;
 				}
 			}
