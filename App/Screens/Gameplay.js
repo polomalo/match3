@@ -86,25 +86,30 @@ App.Gameplay = new Screen({
 		},
 
 		'Gameplay tile click': function(sprite) {
-			this.pulsation(sprite.children)
-			this.SELECTED_ITEMS.push(sprite)
+			this.SELECTED_ITEMS.push(sprite);
+			this.pulsation(this.SELECTED_ITEMS[0].children);
+			console.log(test)
 			if (this.SELECTED_ITEMS.length > 1) {
-				this.TILES_NUMBER[this.SELECTED_ITEMS[1].column][this.SELECTED_ITEMS[1].row] = this.SELECTED_ITEMS[0].elementNumber;
-				this.TILES_NUMBER[this.SELECTED_ITEMS[0].column][this.SELECTED_ITEMS[0].row] = this.SELECTED_ITEMS[1].elementNumber;
-				this.buildField();
-				let r = this.checkSequance();
-				if (r){
-					this.recursive();
+				if (this.SELECTED_ITEMS[1].column === this.SELECTED_ITEMS[0].column || this.SELECTED_ITEMS[1].row === this.SELECTED_ITEMS[0].row && this.SELECTED_ITEMS[1].childSprite !== 'empty'){
+					this.TILES_NUMBER[this.SELECTED_ITEMS[1].column][this.SELECTED_ITEMS[1].row] = this.SELECTED_ITEMS[0].elementNumber;
+					this.TILES_NUMBER[this.SELECTED_ITEMS[0].column][this.SELECTED_ITEMS[0].row] = this.SELECTED_ITEMS[1].elementNumber;
+					this.buildField();
+					let r = this.checkSequance();
+					if (r){
+						this.recursive();
+					} else {
+						this.TILES_NUMBER[this.SELECTED_ITEMS[1].column][this.SELECTED_ITEMS[1].row] = this.SELECTED_ITEMS[1].elementNumber;
+						this.TILES_NUMBER[this.SELECTED_ITEMS[0].column][this.SELECTED_ITEMS[0].row] = this.SELECTED_ITEMS[0].elementNumber;
+						setTimeout(() => {
+							this.buildField();
+						},500)
+						console.log("mo match")
+					}
+					this.SELECTED_ITEMS = []
 				} else {
-					this.TILES_NUMBER[this.SELECTED_ITEMS[1].column][this.SELECTED_ITEMS[1].row] = this.SELECTED_ITEMS[1].elementNumber;
-					this.TILES_NUMBER[this.SELECTED_ITEMS[0].column][this.SELECTED_ITEMS[0].row] = this.SELECTED_ITEMS[0].elementNumber;
-					setTimeout(() => {
-						this.buildField();
-					},500)
-					console.log("mo match")
+					this.SELECTED_ITEMS.pop()
 				}
-				this.SELECTED_ITEMS = []
-			}
+			} 
 			
 		},
 

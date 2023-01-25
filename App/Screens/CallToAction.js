@@ -30,6 +30,7 @@ App.CallToAction = new Screen({
 		'CallToAction showed': function() {
 			this.animateShow();
 			this.bringToTop();
+			this.pulsation(this['Play Button']);
 			
 		},
 
