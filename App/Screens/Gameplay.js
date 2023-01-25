@@ -87,8 +87,7 @@ App.Gameplay = new Screen({
 
 		'Gameplay tile click': function(sprite) {
 			this.SELECTED_ITEMS.push(sprite);
-			this.pulsation(this.SELECTED_ITEMS[0].children);
-			console.log(test)
+			let test = this.pulsation(this.SELECTED_ITEMS[0].children);
 			if (this.SELECTED_ITEMS.length > 1) {
 				if (this.SELECTED_ITEMS[1].column === this.SELECTED_ITEMS[0].column || this.SELECTED_ITEMS[1].row === this.SELECTED_ITEMS[0].row && this.SELECTED_ITEMS[1].childSprite !== 'empty'){
 					this.TILES_NUMBER[this.SELECTED_ITEMS[1].column][this.SELECTED_ITEMS[1].row] = this.SELECTED_ITEMS[0].elementNumber;
@@ -273,6 +272,7 @@ App.Gameplay = new Screen({
 					clearInterval(interval);
 					for (let i = 0; i < this.TILES_NUMBER.length; i++){
 						for (let k = 0;k < this.TILES_NUMBER[i].length; k++){
+							this.SPRITE_TILES[i][k].isInteractive = false
 							this.animate(
 								0.00, this.SPRITE_TILES[i][k], {position: [2000, this.SPRITE_TILES[i][k].position.y], duration: 0.5, delay: 0.5 * k},
 							)
